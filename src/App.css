@@ -41,3 +41,48 @@ input {
   margin-top: 20px;
   font-size: 18px;
 }
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  margin-top: 10px;
+}
+
+.presetCol {
+  min-width: 160px;
+}
+
+.presetLabel {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.presetBtns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: #999;
+}
+
+.btn.secondary {
+  background: #f4f6f8;
+}
