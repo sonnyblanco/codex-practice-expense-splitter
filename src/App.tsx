@@ -24,6 +24,7 @@ export default function App() {
   const [tip, setTip] = useState<number>(0);
   const [people, setPeople] = useState<number>(1);
   const [currency, setCurrency] = useState<CurrencyCode>("AUD");
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
 
   // Load
   useEffect(() => {
@@ -60,6 +61,11 @@ export default function App() {
     localStorage.removeItem(STORAGE_KEY);
   };
 
+  useEffect(() => {
+  localStorage.setItem("theme", darkMode ? "dark" : "light");
+  document.documentElement.dataset.theme = darkMode ? "dark" : "light";
+  }, [darkMode]);
+
   const tipPresets = [0, 5, 10, 15] as const;
 
   return (
@@ -68,6 +74,9 @@ export default function App() {
         <h1>Expense Splitter</h1>
         <button className="btn secondary" onClick={reset} type="button">
           Reset
+        </button>
+        <button className="btn" type="button" onClick={() => setDarkMode((v) => !v)}>
+          {darkMode ? "Light mode" : "Dark mode"}
         </button>
       </div>
 
