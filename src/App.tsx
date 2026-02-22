@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 
-type SavedData = { amount: number; tip: number; people: number };
+type CurrencyCode = "AUD" | "USD" | "PHP";
+type SavedData = { amount: number; tip: number; people: number; currency: CurrencyCode };
 
 const STORAGE_KEY = "expenseData";
 
@@ -9,10 +10,20 @@ function clampNumber(value: number, min: number) {
   return Number.isFinite(value) ? Math.max(min, value) : min;
 }
 
+function formatMoney(value: number, currency: CurrencyCode) {
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency,
+    currencyDisplay: "symbol",
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
 export default function App() {
   const [amount, setAmount] = useState<number>(0);
   const [tip, setTip] = useState<number>(0);
   const [people, setPeople] = useState<number>(1);
+  const [currency, setCurrency] = useState<CurrencyCode>("AUD");
 
   // Load
   useEffect(() => {
@@ -24,6 +35,7 @@ export default function App() {
       setAmount(clampNumber(Number(parsed.amount ?? 0), 0));
       setTip(clampNumber(Number(parsed.tip ?? 0), 0));
       setPeople(clampNumber(Number(parsed.people ?? 1), 1));
+      setCurrency((parsed.currency as CurrencyCode) ?? "AUD");
     } catch {
       // ignore invalid saved data
     }
@@ -33,9 +45,9 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ amount, tip, people } satisfies SavedData)
+      JSON.stringify({ amount, tip, people, currency } satisfies SavedData)
     );
-  }, [amount, tip, people]);
+  }, [amount, tip, people, currency]);
 
   const totalWithTip = useMemo(() => amount + (amount * tip) / 100, [amount, tip]);
   const perPerson = useMemo(() => (people > 0 ? totalWithTip / people : 0), [people, totalWithTip]);
@@ -44,6 +56,7 @@ export default function App() {
     setAmount(0);
     setTip(0);
     setPeople(1);
+    setCurrency("AUD");
     localStorage.removeItem(STORAGE_KEY);
   };
 
@@ -52,13 +65,24 @@ export default function App() {
   return (
     <div className="container">
       <div className="header">
-        <h1>Expense Splitter (Feature Branch Test)</h1>
+        <h1>Expense Splitter</h1>
         <button className="btn secondary" onClick={reset} type="button">
           Reset
         </button>
       </div>
 
-      <label>Bill Amount ($)</label>
+      <label>Currency</label>
+      <select
+        className="select"
+        value={currency}
+        onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
+      >
+        <option value="AUD">AUD</option>
+        <option value="USD">USD</option>
+        <option value="PHP">PHP</option>
+      </select>
+
+      <label>Bill Amount</label>
       <input
         type="number"
         min="0"
@@ -101,8 +125,8 @@ export default function App() {
       />
 
       <div className="result">
-        <p>Total with Tip: ${totalWithTip.toFixed(2)}</p>
-        <p>Per Person: ${perPerson.toFixed(2)}</p>
+        <p>Total with Tip: {formatMoney(totalWithTip, currency)}</p>
+        <p>Per Person: {formatMoney(perPerson, currency)}</p>
       </div>
     </div>
   );

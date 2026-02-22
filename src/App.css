@@ -86,3 +86,11 @@ input {
 .btn.secondary {
   background: #f4f6f8;
 }
+
+.select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
