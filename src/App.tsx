@@ -52,7 +52,7 @@ export default function App() {
   return (
     <div className="container">
       <div className="header">
-        <h1>Expense Splitter</h1>
+        <h1>Expense Splitter (Feature Branch Test)</h1>
         <button className="btn secondary" onClick={reset} type="button">
           Reset
         </button>
