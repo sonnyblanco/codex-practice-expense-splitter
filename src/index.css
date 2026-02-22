@@ -1,8 +1,25 @@
-* {
-  box-sizing: border-box;
+* { box-sizing: border-box; }
+
+:root {
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --text: #222222;
+  --border: #cccccc;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f141a;
+  --card: #151c24;
+  --text: #e9eef5;
+  --border: #2a3543;
+}
+
+/* Override any template defaults */
+html, body, #root {
+  height: 100%;
 }
 
 body {
   margin: 0;
-  background: #f4f6f8;
+  background: var(--bg) !important;
 }
